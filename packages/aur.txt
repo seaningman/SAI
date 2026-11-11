@@ -1,0 +1,6 @@
+# AUR packages, one per line (installed with yay).
+
+zen-browser-bin
+visual-studio-code-bin
+bibata-cursor-theme-bin
+tork   # terminal torrent search and download client (github.com/melqtx/tork, MIT)

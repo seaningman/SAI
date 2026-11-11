@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# wallpaper-set <file>: show <file> on every output with swaybg and remember it.
+set -euo pipefail
+img=${1:?usage: wallpaper-set <image>}
+[[ -f $img ]] || { echo "wallpaper-set: $img not found" >&2; exit 1; }
+state="${XDG_STATE_HOME:-$HOME/.local/state}/wallpaper"
+mkdir -p "$(dirname "$state")"
+printf '%s\n' "$img" >"$state"
+old=$(pgrep -x swaybg || true)
+setsid -f swaybg -m fill -i "$img" >/dev/null 2>&1
+sleep 0.4
+[[ -n $old ]] && kill "$old" 2>/dev/null || true

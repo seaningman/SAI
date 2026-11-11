@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# wallpaper-picker: open the coverflow picker (a small standalone Quickshell config).
+cfg=wallpaper
+if pgrep -f "quickshell.*-c $cfg" >/dev/null; then
+    exec quickshell -c "$cfg" ipc call picker toggle
+fi
+quickshell -c "$cfg" -d
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+    quickshell -c "$cfg" ipc call picker toggle 2>/dev/null && exit 0
+    sleep 0.3
+done

@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# theme-render: fill every template in ~/.config/theme/templates from the active
+# theme's colors.toml and write the results to the paths in targets.conf.
+# Usage: theme-render [--no-reload]
+set -euo pipefail
+
+CONF="${XDG_CONFIG_HOME:-$HOME/.config}/theme"
+RELOAD=1
+[[ ${1:-} == --no-reload ]] && RELOAD=0
+
+[[ -e $CONF/current ]] || ln -sfn themes/tokyo-night "$CONF/current"
+COLORS="$CONF/current/colors.toml"
+[[ -f $COLORS ]] || { echo "theme-render: $COLORS not found" >&2; exit 1; }
+
+# Build a sed script: {{key}} -> value, plus {{key_rgb}} (hex without '#') for colours.
+sedscript=$(mktemp)
+trap 'rm -f "$sedscript"' EXIT
+while IFS= read -r line; do
+    [[ $line =~ ^[[:space:]]*([a-z_]+)[[:space:]]*=[[:space:]]*\"([^\"]*)\" ]] || continue
+    key=${BASH_REMATCH[1]} val=${BASH_REMATCH[2]}
+    [[ $key == name ]] && key=theme_name
+    printf 's|{{%s}}|%s|g\n' "$key" "$val" >>"$sedscript"
+    if [[ $val =~ ^#[0-9a-fA-F]{6}$ ]]; then
+        printf 's|{{%s_rgb}}|%s|g\n' "$key" "${val#\#}" >>"$sedscript"
+    fi
+done <"$COLORS"
+
+while IFS='|' read -r tmpl dest reload; do
+    [[ -z $tmpl || $tmpl == \#* ]] && continue
+    dest=${dest/#\~/$HOME}
+    mkdir -p "$(dirname "$dest")"
+    sed -f "$sedscript" "$CONF/templates/$tmpl" >"$dest.new"
+    if grep -q '{{[a-z_]*}}' "$dest.new"; then
+        echo "theme-render: unresolved placeholder in $tmpl" >&2
+        rm -f "$dest.new"
+        exit 1
+    fi
+    mv -f "$dest.new" "$dest"
+    if ((RELOAD)) && [[ -n ${reload:-} ]]; then
+        bash -c "$reload" >/dev/null 2>&1 || true
+    fi
+done <"$CONF/targets.conf"

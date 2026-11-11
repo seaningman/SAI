@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# wallpaper-random: set a random wallpaper from ~/Wallpapers.
+img=$(find "$HOME/Wallpapers" -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) | shuf -n1)
+[[ -n $img ]] || { notify-send "Wallpapers" "No images in ~/Wallpapers" 2>/dev/null; exit 1; }
+exec wallpaper-set "$img"

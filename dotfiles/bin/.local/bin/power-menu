@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# power-menu: lock / suspend / log out / reboot / shut down via fuzzel.
+choice=$(printf '%s\n' "Lock" "Suspend" "Log out" "Reboot" "Shut down" | fuzzel --dmenu --prompt "Power: ") || exit 0
+case $choice in
+    Lock) loginctl lock-session ;;
+    Suspend) systemctl suspend ;;
+    "Log out") loginctl terminate-user "$USER" ;;
+    Reboot) systemctl reboot ;;
+    "Shut down") systemctl poweroff ;;
+esac

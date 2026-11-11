@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# theme-menu: pick a theme with fuzzel.
+choice=$(theme-set | fuzzel --dmenu --prompt "Theme: ") || exit 0
+[[ -n $choice ]] && theme-set "$choice"

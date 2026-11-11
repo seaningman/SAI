@@ -1,0 +1,14 @@
+# Core system for the target machine (installed with pacstrap, not part of your app list).
+base
+base-devel
+linux
+linux-firmware
+intel-ucode
+sudo
+cryptsetup
+dosfstools
+e2fsprogs
+efibootmgr
+networkmanager
+stow
+git

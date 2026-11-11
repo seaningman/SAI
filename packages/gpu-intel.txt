@@ -1,0 +1,3 @@
+# Installed when an Intel GPU is detected (ThinkPad X13 Gen 3, Iris Xe).
+vulkan-intel
+intel-media-driver

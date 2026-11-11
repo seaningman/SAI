@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# theme-set [name]: switch the active theme (no name = list themes).
+set -euo pipefail
+CONF="${XDG_CONFIG_HOME:-$HOME/.config}/theme"
+if [[ $# -eq 0 ]]; then
+    for d in "$CONF"/themes/*/; do basename "$d"; done
+    exit 0
+fi
+[[ -f $CONF/themes/$1/colors.toml ]] || { echo "theme-set: no theme '$1'" >&2; exit 1; }
+ln -sfn "themes/$1" "$CONF/current"
+theme-render
+notify-send "Theme" "Switched to $1" 2>/dev/null || true

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# wallpaper-restore: at login, re-apply the last wallpaper or fall back to a random one from ~/Wallpapers.
+state="${XDG_STATE_HOME:-$HOME/.local/state}/wallpaper"
+img=""
+[[ -f $state ]] && img=$(<"$state")
+if [[ ! -f $img ]]; then
+    img=$(find "$HOME/Wallpapers" -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null | shuf -n1)
+fi
+if [[ -f $img ]]; then
+    exec wallpaper-set "$img"
+fi
+# No wallpaper available: plain theme background.
+bg=$(sed -n 's/^darker_background *= *"#\(.*\)"/\1/p' "${XDG_CONFIG_HOME:-$HOME/.config}/theme/current/colors.toml")
+exec swaybg -c "${bg:-0e0e14}"

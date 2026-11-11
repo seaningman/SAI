@@ -1,0 +1,117 @@
+# Official repo packages, one per line. Lines starting with # are comments.
+# GPU drivers are in gpu-*.txt; 32-bit packages in multilib.txt.
+
+# Hyprland session
+hyprland
+hyprsunset
+hypridle
+hyprlock
+hyprpicker
+hyprshot
+hyprpolkitagent
+xdg-desktop-portal
+xdg-desktop-portal-hyprland
+xdg-desktop-portal-gtk
+polkit
+gnome-keyring
+libsecret
+wl-clipboard
+cliphist
+
+# Desktop components
+waybar
+fuzzel
+mako
+swayosd
+swaybg
+
+# Wallpaper picker (standalone Quickshell config, nothing else of Quickshell is used)
+quickshell
+qt6-declarative
+qt6-wayland
+imagemagick
+
+# Audio
+pipewire
+pipewire-pulse
+pipewire-alsa
+wireplumber
+pavucontrol
+playerctl
+sof-firmware
+
+# Network and Bluetooth
+networkmanager
+nm-connection-editor
+bluez
+bluez-utils
+blueman
+
+# Brightness and power
+brightnessctl
+upower
+power-profiles-daemon
+
+# Screenshots
+grim
+slurp
+
+# Utilities
+curl
+wget
+jq
+rsync
+libnotify
+xdg-user-dirs
+xdg-utils
+usbutils
+
+# Terminal, shell, prompt
+kitty
+fish
+starship
+eza
+
+# Fonts
+fontconfig
+ttf-jetbrains-mono-nerd
+noto-fonts
+noto-fonts-cjk
+noto-fonts-emoji
+
+# Apps
+obsidian
+qalculate-gtk
+calibre
+komikku
+discord
+mpv
+yt-dlp
+imv
+zathura
+zathura-pdf-mupdf
+yazi
+ffmpegthumbnailer
+poppler
+
+# Editors and system tools
+vim
+nano
+fastfetch
+btop
+unzip
+7zip
+fwupd
+fprintd
+flatpak
+
+# Dev and CLI tools
+git
+github-cli
+nodejs
+npm
+fzf
+ripgrep
+fd
+zoxide
+bat

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# keybinds-help: list the keybindings from the Hyprland config in fuzzel.
+grep -h -o '^bind("[^"]*", "[^"]*"' "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/bindings.lua" 2>/dev/null \
+    | sed -E 's/^bind\("([^"]*)", "([^"]*)"/\1  —  \2/' | fuzzel --dmenu --prompt "Keys: " >/dev/null

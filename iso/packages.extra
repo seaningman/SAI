@@ -1,0 +1,6 @@
+# Added on top of the stock archiso "releng" package list.
+git
+rsync
+gptfdisk
+cryptsetup
+dosfstools

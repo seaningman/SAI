@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# charge-limit [percent|status]: set the battery charge stop threshold (default 80).
+# Needs the udev rule from installer/system (installed by install.sh after asking).
+set -euo pipefail
+f=$(find /sys/class/power_supply/ -path "*/BAT*/charge_control_end_threshold" 2>/dev/null | head -n1)
+[[ -n $f ]] || { echo "charge-limit: no battery with a charge threshold" >&2; exit 1; }
+case "${1:-80}" in
+    status) cat "$f" ;;
+    ''|*[!0-9]*) echo "usage: charge-limit [60-100|status]" >&2; exit 1 ;;
+    *)
+        (($1 >= 50 && $1 <= 100)) || { echo "charge-limit: value must be 50-100" >&2; exit 1; }
+        echo "$1" >"$f"
+        ;;
+esac
