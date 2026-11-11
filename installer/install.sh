@@ -184,7 +184,7 @@ fi
 step "Copying the dotfiles and first-boot setup"
 HOME_DIR="$MNT/home/$USERNAME_"
 run mkdir -p "$HOME_DIR/.dotfiles" "$HOME_DIR/.config/fish/conf.d" "$HOME_DIR/.local/state/arch-distro"
-run rsync -a --exclude .git --exclude iso --exclude build --exclude out "$REPO/" "$HOME_DIR/.dotfiles/"
+run rsync -a --exclude .git --exclude iso --exclude build --exclude out --exclude vm "$REPO/" "$HOME_DIR/.dotfiles/"
 # Runs desktop-setup.sh once on the first TTY login, then removes itself.
 run_sh "cat >$HOME_DIR/.config/fish/conf.d/00-first-boot.fish <<'FISH'
 if status is-login; and status is-interactive; and test -f ~/.dotfiles/installer/desktop-setup.sh

@@ -34,7 +34,7 @@ run_sh "cat '$REPO/iso/packages.extra' | sed -E 's/#.*//; /^[[:space:]]*\$/d' >>
 run sed -i -e 's|^iso_name=.*|iso_name="arch-distro"|' -e 's|^iso_application=.*|iso_application="Arch installer"|' "$PROFILE/profiledef.sh"
 run rsync -a "$REPO/iso/airootfs/" "$PROFILE/airootfs/"
 run mkdir -p "$PROFILE/airootfs/opt/distro"
-run rsync -a --exclude .git --exclude build --exclude out --exclude iso "$REPO/" "$PROFILE/airootfs/opt/distro/"
+run rsync -a --exclude .git --exclude build --exclude out --exclude vm --exclude iso "$REPO/" "$PROFILE/airootfs/opt/distro/"
 run_sh "grep -q '/opt/distro' '$PROFILE/profiledef.sh' || sed -i 's|^file_permissions=(|file_permissions=(\\n  [\"/opt/distro/installer/install.sh\"]=\"0:0:755\"\\n  [\"/opt/distro/installer/desktop-setup.sh\"]=\"0:0:755\"|' '$PROFILE/profiledef.sh'"
 
 step "Building"
