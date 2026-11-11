@@ -61,6 +61,9 @@ USERNAME_=${USERNAME_:-$(prompt "Username" "user")}
 TIMEZONE=${TIMEZONE:-$(prompt "Timezone" "Europe/Berlin")}
 LOCALE=${LOCALE:-$(prompt "Locale" "en_US.UTF-8")}
 KEYMAP=${KEYMAP:-$(prompt "Console keymap" "de-latin1")}
+# Switch the live console to it now, so the passphrase and password are typed with the
+# same layout they will be entered with at boot (y/z and symbols differ between layouts).
+"$DRY_RUN" || loadkeys "$KEYMAP" 2>/dev/null || warn "could not load keymap $KEYMAP; the live console stays on its default layout"
 if [[ -z ${USE_LUKS:-} ]]; then
     if ask "Encrypt the disk with LUKS2?" y; then USE_LUKS=yes; else USE_LUKS=no; fi
 fi

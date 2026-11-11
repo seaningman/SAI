@@ -1,3 +1,5 @@
 # Packages from the [multilib] repo. Installed only when multilib is enabled.
 steam
 lib32-mesa
+# Named explicitly so pacman does not ask which lib32-vulkan-driver to use (Intel Iris Xe):
+lib32-vulkan-intel

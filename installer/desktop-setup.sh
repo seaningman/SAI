@@ -43,6 +43,10 @@ step "Checking the system"
 command -v sudo >/dev/null || die "sudo is not installed"
 if ! "$DRY_RUN"; then
     sudo -v || die "sudo does not work for $USER"
+    # Keep the sudo timestamp alive during long AUR builds.
+    (while sudo -n true 2>/dev/null; do sleep 50; done) &
+    SUDO_KEEPALIVE=$!
+    trap 'kill "$SUDO_KEEPALIVE" 2>/dev/null || true' EXIT
     ping -c1 -W3 archlinux.org >/dev/null 2>&1 || die "no internet connection"
 fi
 ok "Arch Linux, user $USER"
@@ -71,7 +75,7 @@ if "$SKIP_PACKAGES"; then
 else
     mapfile -t PKGS < <(read_list "$REPO/packages/pacman.txt")
     run sudo pacman -Syu --needed "${CONFIRM[@]}" "${PKGS[@]}"
-    if lspci 2>/dev/null | grep -Eqi 'vga|3d|display' && lspci | grep -Eqi 'intel'; then
+    if lspci 2>/dev/null | grep -Ei 'vga|3d|display' | grep -qi intel; then
         mapfile -t GPU < <(read_list "$REPO/packages/gpu-intel.txt")
         run sudo pacman -S --needed "${CONFIRM[@]}" "${GPU[@]}"
     fi
@@ -114,6 +118,8 @@ backup_conflicts() { # move real files that block a stow link into the backup di
         fi
     done < <(find "$REPO/dotfiles/$pkg" \( -type f -o -type l \) -print0)
 }
+# The ISO copy can lose executable bits; the helper scripts must be runnable.
+run chmod +x "$REPO"/dotfiles/bin/.local/bin/* "$REPO"/dotfiles/wallpaper-picker/.config/quickshell/wallpaper/wall-thumbs.sh
 BACKED_UP=false
 for pkg in "${PACKAGES[@]}"; do
     backup_conflicts "$pkg"
